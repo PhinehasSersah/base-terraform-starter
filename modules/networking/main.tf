@@ -5,64 +5,61 @@ locals {
   env_label = terraform.workspace
 }
 
-resource "aws_vpc" "main" {
-  cidr_block           = var.vpc_cidr
-  enable_dns_support   = true
-  enable_dns_hostnames = true
+# data "aws_vpc" "main" {
+#   id = var.existing_vpc_id
+# }
+# data "aws_subnet" "public" {
+#   id = var.existing_subnet_id
+# }
 
-  tags = {
-    Name        = "kente-vpc-${local.env_label}"
-    Project     = var.project_tag
-    Environment = local.env_label
-  }
-}
 
-resource "aws_internet_gateway" "main" {
-  vpc_id = aws_vpc.main.id
+# resource "aws_internet_gateway" "main" {
+#   vpc_id = var.existing_vpc_id
 
-  tags = {
-    Name        = "kente-igw-${local.env_label}"
-    Project     = var.project_tag
-    Environment = local.env_label
-  }
-}
+#   tags = {
+#     Name        = "kente-igw-${local.env_label}"
+#     Project     = var.project_tag
+#     Environment = local.env_label
+#   }
+# }
 
-resource "aws_subnet" "public" {
-  vpc_id                  = aws_vpc.main.id
-  cidr_block              = cidrsubnet(var.vpc_cidr, 4, 0)
-  map_public_ip_on_launch = true
 
-  tags = {
-    Name        = "kente-public-subnet-${local.env_label}"
-    Project     = var.project_tag
-    Environment = local.env_label
-  }
-}
+# resource "aws_subnet" "public" {
+#   vpc_id                  = aws_vpc.main.id
+#   cidr_block              = cidrsubnet(var.vpc_cidr, 4, 0)
+#   map_public_ip_on_launch = true
 
-resource "aws_route_table" "public" {
-  vpc_id = aws_vpc.main.id
+#   tags = {
+#     Name        = "kente-public-subnet-${local.env_label}"
+#     Project     = var.project_tag
+#     Environment = local.env_label
+#   }
+# }
 
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.main.id
-  }
+# resource "aws_route_table" "public" {
+#   vpc_id = var.existing_vpc_id
 
-  tags = {
-    Name        = "kente-public-rt-${local.env_label}"
-    Project     = var.project_tag
-    Environment = local.env_label
-  }
-}
+#   route {
+#     cidr_block = "0.0.0.0/0"
+#     gateway_id = aws_internet_gateway.main.id
+#   }
 
-resource "aws_route_table_association" "public" {
-  subnet_id      = aws_subnet.public.id
-  route_table_id = aws_route_table.public.id
-}
+#   tags = {
+#     Name        = "kente-public-rt-${local.env_label}"
+#     Project     = var.project_tag
+#     Environment = local.env_label
+#   }
+# }
+
+# resource "aws_route_table_association" "public" {
+#   subnet_id      = var.existing_subnet_id
+#   route_table_id = aws_route_table.public.id
+# }
 
 resource "aws_security_group" "web" {
   name        = "kente-web-sg-${local.env_label}"
-  description = "Allows SSH (for Ansible) and the app's HTTP port."
-  vpc_id      = aws_vpc.main.id
+  description = "Allows SSH (for Ansible) and the app12s HTTP port."
+  vpc_id      = var.existing_vpc_id
 
   ingress {
     description = "SSH for Ansible configuration"

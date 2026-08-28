@@ -1,16 +1,15 @@
 variable "aws_region" {
   description = "AWS region to deploy into."
   type        = string
-  default     = "us-east-1"
+  default     = "eu-west-1"
 }
-
+ 
 variable "vpc_cidr" {
   description = "CIDR block for this environment's VPC."
   type        = string
   default     = "10.20.0.0/16"
 }
-
-variable "instance_type" {
+ variable "instance_type" {
   description = "EC2 instance type for the web tier."
   type        = string
   default     = "t3.micro"
@@ -31,5 +30,5 @@ variable "project_tag" {
 variable "key_name" {
   description = "Name of an existing EC2 key pair to associate with the web-tier instance(s), for the SSH access Ansible will use."
   type        = string
-  default     = ""
+  default     = "ansible-key-pair"
 }

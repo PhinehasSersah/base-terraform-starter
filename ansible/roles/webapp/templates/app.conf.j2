@@ -1,0 +1,12 @@
+# Managed by Ansible - do not edit by hand.
+# Environment: {{ kente_environment }}
+
+server {
+    listen {{ app_port }};
+    server_name _;
+
+    location / {
+        proxy_pass http://127.0.0.1:8080;
+        proxy_set_header X-Environment "{{ kente_environment }}";
+    }
+}

@@ -1,0 +1,4 @@
+---
+kente_environment: staging
+app_port: 9080
+db_password: "{{ vault_db_password }}"

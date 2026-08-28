@@ -1,0 +1,35 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for webapp
+
+- name: Install nginx
+  ansible.builtin.package:
+    name: nginx
+    state: present
+
+- name: Template Nginx site configuration
+  ansible.builtin.template:
+    src: app.conf.j2
+    dest: /etc/nginx/conf.d/app.conf
+  notify: restart nginx
+
+- name: Ensure app config directory exists
+  ansible.builtin.file:
+    path: /etc/kente-retail
+    state: directory
+    mode: "0750"
+    owner: root
+    group: root
+
+- name: Template application environment file
+  ansible.builtin.template:
+    src: app.env.j2
+    dest: /etc/kente-retail/app.env
+    mode: "0600"
+  notify: restart nginx
+
+- name: Ensure nginx is started and enabled
+  ansible.builtin.service:
+    name: nginx
+    state: started
+    enabled: true

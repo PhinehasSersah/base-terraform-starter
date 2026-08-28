@@ -1,11 +1,11 @@
 output "vpc_id" {
   description = "ID of the VPC."
-  value       = aws_vpc.main.id
+  value       = var.existing_vpc_id
 }
 
 output "subnet_id" {
   description = "ID of the public subnet."
-  value       = aws_subnet.public.id
+  value       = var.existing_subnet_id
 }
 
 output "security_group_id" {
